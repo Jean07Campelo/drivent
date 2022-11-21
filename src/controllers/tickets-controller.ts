@@ -28,26 +28,7 @@ export async function postTicket(req: AuthenticatedRequest, res: Response) {
     const ticket = await ticketService.getTicketByEnrollmentId(enrollmentId);
     if (!ticket) return res.sendStatus(httpStatus.NOT_FOUND);
 
-    const ticketData = {
-      id: ticket.id,
-      status: ticket.status,
-      ticketTypeId: ticket.ticketTypeId,
-      enrollmentId: ticket.enrollmentId,
-
-      TicketType: {
-        id: ticket.TicketType.id,
-        name: ticket.TicketType.name,
-        price: ticket.TicketType.price,
-        isRemote: ticket.TicketType.isRemote,
-        includesHotel: ticket.TicketType.includesHotel,
-        createdAt: ticket.TicketType.createdAt,
-        updatedAt: ticket.TicketType.updatedAt,
-      },
-      createdAt: ticket.createdAt,
-      updatedAt: ticket.updatedAt,
-    };
-
-    return res.status(httpStatus.CREATED).send(ticketData);
+    return res.status(httpStatus.CREATED).send(ticket);
   } catch (error) {
     if (error.name === "NotFoundError") {
       return res.status(httpStatus.NOT_FOUND).send(error);
@@ -60,9 +41,7 @@ export async function getTickets(req: AuthenticatedRequest, res: Response) {
 
   try {
     const userExists = await ticketService.getEnrollmentByUserId(userId);
-    if (!userExists) {
-      return res.sendStatus(httpStatus.NOT_FOUND);
-    }
+    if (!userExists) return res.sendStatus(httpStatus.NOT_FOUND);
 
     const enrollmentId: number = userExists.id;
     const ticket = await ticketService.getTicketByEnrollmentId(enrollmentId);

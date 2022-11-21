@@ -17,6 +17,17 @@ async function create({ ticketTypeId, enrollmentId }: upsertTicketType) {
   });
 }
 
+async function update(ticketId: number) {
+  return prisma.ticket.update({
+    where: {
+      id: ticketId,
+    },
+    data: {
+      status: TicketStatus.PAID,
+    },
+  });
+}
+
 async function findFirst(enrollmentId: number) {
   return prisma.ticket.findFirst({
     where: {
@@ -28,10 +39,57 @@ async function findFirst(enrollmentId: number) {
   });
 }
 
+async function findFirstTicket(ticketId: number) {
+  return prisma.ticket.findFirst({
+    where: {
+      id: ticketId,
+    }
+  });
+}
+
+async function findFirstTicketType(ticketTypeId: number) {
+  return prisma.ticketType.findFirst({
+    where: {
+      id: ticketTypeId
+    }
+  });
+}
+
+async function findFisrtTicketAndEnrollment(ticketId: number, enrollmentId: number) {
+  return prisma.ticket.findFirst({
+    where: {
+      id: ticketId,
+      enrollmentId
+    }
+  });
+}
+
+async function findFirstEnrollmentById(enrollmentId: number) {
+  return prisma.ticket.findFirst({
+    where: {
+      enrollmentId
+    }
+  });
+}
+
+async function findFirstPayment(ticketId: number) {
+  return prisma.payment.findFirst({
+    where: {
+      ticketId
+    }
+  });
+}
+
 const ticketRepository = {
   findMany,
   create,
   findFirst,
+  findFirstTicket,
+  findFirstTicketType,
+  findFisrtTicketAndEnrollment,
+  findFirstEnrollmentById,
+  findFirstPayment,
+  update
 };
 
 export default ticketRepository;

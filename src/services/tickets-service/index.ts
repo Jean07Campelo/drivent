@@ -37,11 +37,47 @@ async function getTicketByEnrollmentId(enrollmentId: number): Promise<ticketByEn
   return ticket;
 }
 
+async function getTicketById(ticketId: number): Promise<Ticket> {
+  const ticketById = await ticketRepository.findFirstTicket(ticketId);
+  if (!ticketById) throw notFoundError();
+  return ticketById;
+}
+
+async function getTicketTypeById(ticketTypeId: number): Promise<TicketType> {
+  return ticketRepository.findFirstTicketType(ticketTypeId);
+}
+
+type ticketEnrollmentType = {
+  id: number;
+  ticketTypeId: number;
+  enrollmentId: number;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+async function getTicketAndEnrollment(ticketId: number, enrollmentId: number): Promise<ticketEnrollmentType> {
+  return ticketRepository.findFisrtTicketAndEnrollment(ticketId, enrollmentId);
+}
+
+async function getPaymentByTicketId(ticketId: number) {
+  return ticketRepository.findFirstPayment(ticketId);
+}
+
+async function updatePaymentByTicketId(ticketId: number): Promise<Ticket> {
+  return ticketRepository.update(ticketId);
+}
+
 const ticketService = {
   getManyTickets,
   getEnrollmentByUserId,
   postTicket,
   getTicketByEnrollmentId,
+  getTicketById,
+  getTicketTypeById,
+  getTicketAndEnrollment,
+  getPaymentByTicketId,
+  updatePaymentByTicketId,
 };
 
 export default ticketService;
