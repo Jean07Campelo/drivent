@@ -1,6 +1,5 @@
 import { Payment, Ticket } from "@prisma/client";
 import paymentRepository from "@/repositories/payment-repository";
-import enrollmentRepository from "@/repositories/enrollment-repository";
 import { notFoundError } from "@/errors";
 
 type PaymentType = 
